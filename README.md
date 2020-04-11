@@ -1,3 +1,18 @@
+# Todoy
+
+## MVP Todo
+
+- [ ] 글로벌 쇼트컷 생성
+  - https://stackoverflow.com/questions/36893426/bringing-an-electron-app-to-foreground-with-a-global-shortcut-like-spotlight-la
+  - https://www.electronjs.org/docs/api/global-shortcut
+- [ ] 로컬스토리지
+
+## Future todo
+
+- [ ] 아이클라우드 연동
+
+---
+
 <img src="internals/img/erb-banner.png" width="100%" />
 
 <br>
