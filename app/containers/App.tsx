@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { getQueryStringObject } from '../utils';
+import { getParameterByName } from '../utils';
 import Modal from './Modal';
 
 type Props = {
@@ -8,9 +8,8 @@ type Props = {
 
 export default function App(props: Props) {
   const { children } = props;
-  const QS = getQueryStringObject(window.location.href);
-  // console.log(QS);
-  if (QS.isModal) {
+  const isModal = getParameterByName('isModal');
+  if (isModal) {
     return <Modal />;
   }
   return <>{children}</>;

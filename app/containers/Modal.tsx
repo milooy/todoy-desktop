@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 
 export default function Modal() {
   const [value, setValue] = useState('');

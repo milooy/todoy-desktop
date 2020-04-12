@@ -11,12 +11,12 @@ export default function Home() {
   const [monthTodos, setMonthTodos] = useState([]);
   const [value, setValue] = useState('');
   useEffect(() => {
-    setMonthTodos(store.get('todo.2020/04'));
+    setMonthTodos(store.get('todo.2020/04') ?? []);
     // store.delete('todo.2020/04'); // 리셋하고 싶다면!
   }, []);
 
-  const handleSubmit = () => {
-    console.log('save', value);
+  const handleSubmit = e => {
+    e.preventDefault();
     setMonthTodos([
       ...monthTodos,
       {
@@ -44,7 +44,7 @@ export default function Home() {
         </button>
       </form>
       <ul>
-        {monthTodos.length > 0 &&
+        {monthTodos &&
           monthTodos.map(todo => <li key={todo.timestamp}>{todo.text}</li>)}
       </ul>
       <Link to={routes.COUNTER}>to Counter</Link>

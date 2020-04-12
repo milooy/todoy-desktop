@@ -66,6 +66,9 @@ const createWindow = async ({ isModal } = { isModal: false }) => {
   // Browser 스타일
   mainWindow = isModal
     ? new BrowserWindow({
+        // show: false,
+        // width: 1024,
+        // height: 728,
         transparent: true,
         frame: true,
         webPreferences
