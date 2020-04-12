@@ -22,6 +22,15 @@ export default function Modal() {
   const rightPress = useKeyPress('ArrowRight');
   const enterPress = useKeyPress('Enter');
 
+  const handleRemove = timestamp => {
+    const updatedMonthTodos: Todo[] = monthTodos.filter(
+      item => item.timestamp !== timestamp
+    );
+
+    setMonthTodos(updatedMonthTodos);
+    store.set('todo.2020/04', updatedMonthTodos);
+  };
+
   useEffect(() => {
     setMonthTodos(store.get('todo.2020/04') ?? []);
     // store.delete('todo.2020/04'); // 리셋하고 싶다면!
@@ -46,12 +55,22 @@ export default function Modal() {
       setButtonCursor(prevState => (prevState < 2 ? prevState + 1 : prevState));
     }
     if (enterPress) {
-      console.log('엔터');
+      const todo = monthTodos[cursor];
+      if (todo === undefined) {
+        return;
+      }
+      /** Remove */
+      if (buttonCursor === 1) {
+        handleRemove(todo.timestamp);
+      }
     }
   }, [downPress, upPress, leftPress, rightPress, enterPress]);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    if (value === '') {
+      return;
+    }
     const updatedMonthTodos: Todo[] = [
       ...monthTodos,
       {
@@ -84,6 +103,7 @@ export default function Modal() {
           <TodoItem
             isActive={cursor === index}
             buttonCursor={buttonCursor}
+            onRemove={handleRemove}
             key={todo.timestamp}
             text={todo.text}
             timestamp={todo.timestamp}

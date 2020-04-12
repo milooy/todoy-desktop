@@ -8,7 +8,8 @@ export default function TodoItem({
   timestamp,
   isDone,
   isActive,
-  buttonCursor
+  buttonCursor,
+  onRemove
 }) {
   const getButtonActive = buttonNum => isActive && buttonCursor === buttonNum;
 
@@ -16,7 +17,9 @@ export default function TodoItem({
     <Container isActive={isActive}>
       <Input value={text} />
       <Button isActive={getButtonActive(0)}>Later</Button>
-      <Button isActive={getButtonActive(1)}>Remove</Button>
+      <Button isActive={getButtonActive(1)} onClick={() => onRemove(timestamp)}>
+        Remove
+      </Button>
       <Button isActive={getButtonActive(2)}>Done</Button>
     </Container>
   );
