@@ -13,10 +13,13 @@ export default function Modal() {
   const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState('');
   const [cursor, setCursor] = useState(-1);
+  const [buttonCursor, setButtonCursor] = useState(2);
   const todoLength = monthTodos.length;
 
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
+  const leftPress = useKeyPress('ArrowLeft');
+  const rightPress = useKeyPress('ArrowRight');
   const enterPress = useKeyPress('Enter');
 
   useEffect(() => {
@@ -25,22 +28,27 @@ export default function Modal() {
   }, []);
 
   useEffect(() => {
-    if (todoLength && downPress) {
+    if (todoLength <= 0) {
+      return;
+    }
+    if (downPress) {
       setCursor(prevState =>
         prevState < todoLength - 1 ? prevState + 1 : prevState
       );
     }
-  }, [downPress]);
-  useEffect(() => {
-    if (todoLength && upPress) {
+    if (upPress) {
       setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
-  }, [upPress]);
-  // useEffect(() => {
-  //   if (todoLength && enterPress) {
-  //     setSelected(items[cursor]);
-  //   }
-  // }, [cursor, enterPress]);
+    if (leftPress) {
+      setButtonCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
+    }
+    if (rightPress) {
+      setButtonCursor(prevState => (prevState < 2 ? prevState + 1 : prevState));
+    }
+    if (enterPress) {
+      console.log('엔터');
+    }
+  }, [downPress, upPress, leftPress, rightPress, enterPress]);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -75,6 +83,7 @@ export default function Modal() {
         {monthTodos.map((todo, index) => (
           <TodoItem
             isActive={cursor === index}
+            buttonCursor={buttonCursor}
             key={todo.timestamp}
             text={todo.text}
             timestamp={todo.timestamp}
