@@ -272,6 +272,8 @@
     "yarn": "^1.21.1"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@hot-loader/react-dom": "^16.13.0",
     "connected-react-router": "^6.6.1",

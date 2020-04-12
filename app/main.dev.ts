@@ -9,7 +9,7 @@
  * `./app/main.prod.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -46,7 +46,7 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-const createWindow = async () => {
+const createWindow = async ({ isModal } = { isModal: false }) => {
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -54,21 +54,33 @@ const createWindow = async () => {
     await installExtensions();
   }
 
-  mainWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    webPreferences:
-      process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true'
-        ? {
-            nodeIntegration: true
-          }
-        : {
-            preload: path.join(__dirname, 'dist/renderer.prod.js')
-          }
-  });
+  const webPreferences =
+    process.env.NODE_ENV === 'development' || process.env.E2E_BUILD === 'true'
+      ? {
+          nodeIntegration: true
+        }
+      : {
+          preload: path.join(__dirname, 'dist/renderer.prod.js')
+        };
 
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
+  // Browser 스타일
+  mainWindow = isModal
+    ? new BrowserWindow({
+        transparent: true,
+        frame: true,
+        webPreferences
+      })
+    : new BrowserWindow({
+        show: false,
+        width: 1024,
+        height: 728,
+        titleBarStyle: 'hiddenInset',
+        webPreferences
+      });
+
+  mainWindow.loadURL(
+    `file://${__dirname}/app.html${isModal ? '?isModal=true' : ''}`
+  );
 
   // @TODO: Use 'ready-to-show' event
   //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
@@ -108,7 +120,22 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+  console.log('hi');
+  createWindow();
+  // 'CommandOrControl+X' 단축키 리스너 등록
+  const ret = globalShortcut.register('CommandOrControl+shift+space', () => {
+    createWindow({ isModal: true });
+    console.log('CommandOrControl+X 눌러짐.');
+  });
+
+  if (!ret) {
+    console.log('등록 실패');
+  }
+
+  // 단축키가 등록되었는지 확인합니다.
+  console.log(globalShortcut.isRegistered('CommandOrControl+shift+space'));
+});
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
