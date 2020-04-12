@@ -38,4 +38,5 @@ const Input = styled.input`
   font-size: 25px;
   border: none;
   flex: 1;
+  background: transparent;
 `;
