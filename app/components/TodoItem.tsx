@@ -26,11 +26,11 @@ export default function TodoItem({
 }
 
 const Container = styled.div`
-  margin-bottom: 10px;
-  padding: 12px;
+  margin-bottom: 6px;
+  padding: 5px 9px;
   display: flex;
-  border: 1px solid #d6d6d6;
-  background: ${({ isActive }) => (isActive ? 'gray' : 'inherit')};
+  border: 4px solid ${({ isActive }) => (isActive ? '#ffb87b' : 'transparent')};
+  background: ${({ isActive }) => (isActive ? '#FFDA02' : 'inherit')};
 `;
 
 const Button = styled.button`

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Todo } from '../types';
@@ -15,6 +15,7 @@ export default function Modal() {
   const [cursor, setCursor] = useState(-1);
   const [buttonCursor, setButtonCursor] = useState(2);
   const todoLength = monthTodos.length;
+  const inputEl = useRef(null);
 
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
@@ -46,7 +47,7 @@ export default function Modal() {
       );
     }
     if (upPress) {
-      setCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
+      setCursor(prevState => (prevState > -1 ? prevState - 1 : prevState));
     }
     if (leftPress) {
       setButtonCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
@@ -89,10 +90,23 @@ export default function Modal() {
     setValue(e.target.value);
   };
 
+  useEffect(() => {
+    if (cursor === -1) {
+      inputEl.current.focus();
+    } else {
+      inputEl.current.blur();
+    }
+  }, [cursor]);
+
   return (
     <ModalWrapper>
-      <Form>
-        <Input type="text" onChange={handleChange} value={value} autoFocus />
+      <Form isActive={cursor === -1}>
+        <Input
+          type="text"
+          onChange={handleChange}
+          value={value}
+          ref={inputEl}
+        />
         <button onClick={handleSubmit} type="submit">
           저장
         </button>
@@ -120,15 +134,16 @@ const ModalWrapper = styled.main`
   background: #ffffffe8;
   box-shadow: rgba(23, 25, 29, 0.05) 0 6px 25px;
   margin: 10px;
-  padding: 12px;
+  padding: 8px;
   border: 1px solid #ececec;
-  border-radius: 8px;
+  border-radius: 6px;
 `;
 
 const Form = styled.form`
   display: flex;
   background: #e6e5e5;
   padding: 12px;
+  border: 4px solid ${({ isActive }) => (isActive ? '#ffb87b' : 'transparent')};
 `;
 
 const Today = styled.div`
@@ -143,6 +158,10 @@ const Input = styled.input`
   border: none;
   background: none;
   font-size: 25px;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 const SeeMore = styled.div`
