@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Todo } from '../types';
+import TodoItem from '../components/TodoItem';
 
 const Store = require('electron-store');
 
@@ -10,6 +11,7 @@ const store = new Store();
 export default function Modal() {
   const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState('');
+  const [cursor, setCursor] = useState(-1);
 
   useEffect(() => {
     setMonthTodos(store.get('todo.2020/04') ?? []);
@@ -36,8 +38,17 @@ export default function Modal() {
     setValue(e.target.value);
   };
 
+  const handleKeyDown = e => {
+    // arrow up/down button should select next/previous list element
+    if (e.keyCode === 38 && cursor > 0) {
+      setCursor(cursor - 1);
+    } else if (e.keyCode === 40 && cursor < monthTodos.length - 1) {
+      setCursor(cursor + 1);
+    }
+  };
+
   return (
-    <ModalWrapper>
+    <ModalWrapper onKeyDown={handleKeyDown}>
       <Form>
         <Input type="text" onChange={handleChange} value={value} autoFocus />
         <button onClick={handleSubmit} type="submit">
@@ -45,10 +56,17 @@ export default function Modal() {
         </button>
       </Form>
       <h1>{dayjs().format('ddd, MMM D, YYYY')}</h1>
-      <ul>
-        {monthTodos &&
-          monthTodos.map(todo => <li key={todo.timestamp}>{todo.text}</li>)}
-      </ul>
+      <div>
+        {monthTodos.map((todo, index) => (
+          <TodoItem
+            isActive={cursor === index}
+            key={todo.timestamp}
+            text={todo.text}
+            timestamp={todo.timestamp}
+            isDone={todo.isDone}
+          />
+        ))}
+      </div>
     </ModalWrapper>
   );
 }
