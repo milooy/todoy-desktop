@@ -1,25 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
+import { Todo } from '../types';
+
+const Store = require('electron-store');
+
+const store = new Store();
 
 export default function Modal() {
+  const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
   const [value, setValue] = useState('');
 
-  const handleSubmit = () => {
-    // console.log('save', value);
-    // setMonthTodos([
-    //   ...monthTodos,
-    //   {
-    //     timestamp: +new Date(),
-    //     text: value,
-    //     isDone: false
-    //   }
-    // ]);
-    // store.set('todo.2020/04', monthTodos);
+  useEffect(() => {
+    setMonthTodos(store.get('todo.2020/04') ?? []);
+    // store.delete('todo.2020/04'); // 리셋하고 싶다면!
+  }, []);
+
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    const updatedMonthTodos: Todo[] = [
+      ...monthTodos,
+      {
+        timestamp: +new Date(),
+        text: value,
+        isDone: false
+      }
+    ];
+    setMonthTodos(updatedMonthTodos);
+    store.set('todo.2020/04', updatedMonthTodos);
     setValue('');
     // console.log(store.get('todo'));
   };
 
-  const handleChange = e => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
   };
 
@@ -31,6 +44,11 @@ export default function Modal() {
           저장
         </button>
       </Form>
+      <h1>{dayjs().format('ddd, MMM D, YYYY')}</h1>
+      <ul>
+        {monthTodos &&
+          monthTodos.map(todo => <li key={todo.timestamp}>{todo.text}</li>)}
+      </ul>
     </ModalWrapper>
   );
 }
