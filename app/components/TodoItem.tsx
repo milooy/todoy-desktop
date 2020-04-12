@@ -9,18 +9,25 @@ export default function TodoItem({
   isDone,
   isActive,
   buttonCursor,
-  onRemove
+  onRemove,
+  onToggleTodo
 }) {
   const getButtonActive = buttonNum => isActive && buttonCursor === buttonNum;
+  console.log({ text, isDone });
 
   return (
-    <Container isActive={isActive}>
-      <Input value={text} />
+    <Container isActive={isActive} isDone={isDone}>
+      <Input value={text} isDone={isDone} />
       <Button isActive={getButtonActive(0)}>Later</Button>
       <Button isActive={getButtonActive(1)} onClick={() => onRemove(timestamp)}>
         Remove
       </Button>
-      <Button isActive={getButtonActive(2)}>Done</Button>
+      <Button
+        isActive={getButtonActive(2)}
+        onClick={() => onToggleTodo(timestamp)}
+      >
+        Done
+      </Button>
     </Container>
   );
 }
@@ -34,11 +41,15 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  background: ${({ isActive }) => (isActive ? 'blue' : 'inherit')};
+  background: ${({ isActive }) => (isActive ? '#258ef3' : 'inherit')};
+  font-weight: bold;
+  border: none;
 `;
 const Input = styled.input`
   font-size: 25px;
   border: none;
   flex: 1;
   background: transparent;
+  text-decoration: ${({ isDone }) => (isDone ? 'line-through' : 'inherit')};
+  color: ${({ isDone }) => (isDone ? 'gray' : 'inherit')};
 `;

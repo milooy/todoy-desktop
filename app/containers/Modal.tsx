@@ -32,8 +32,24 @@ export default function Modal() {
     store.set('todo.2020/04', updatedMonthTodos);
   };
 
+  const handleToggleTodo = timestamp => {
+    const updatedMonthTodos: Todo[] = monthTodos.map(item => {
+      console.log({ item, timestamp });
+      if (item.timestamp === timestamp) {
+        const updatedItem = item;
+        updatedItem.isDone = !item.isDone;
+        return updatedItem;
+      }
+      return item;
+    });
+
+    setMonthTodos(updatedMonthTodos);
+    store.set('todo.2020/04', updatedMonthTodos);
+  };
+
   useEffect(() => {
-    setMonthTodos(store.get('todo.2020/04') ?? []);
+    const todosFromStorage = store.get('todo.2020/04') ?? [];
+    setMonthTodos(todosFromStorage.reverse());
     // store.delete('todo.2020/04'); // 리셋하고 싶다면!
   }, []);
 
@@ -64,6 +80,9 @@ export default function Modal() {
       if (buttonCursor === 1) {
         handleRemove(todo.timestamp);
       }
+      if (buttonCursor === 2) {
+        handleToggleTodo(todo.timestamp);
+      }
     }
   }, [downPress, upPress, leftPress, rightPress, enterPress]);
 
@@ -73,12 +92,12 @@ export default function Modal() {
       return;
     }
     const updatedMonthTodos: Todo[] = [
-      ...monthTodos,
       {
         timestamp: +new Date(),
         text: value,
         isDone: false
-      }
+      },
+      ...monthTodos
     ];
     setMonthTodos(updatedMonthTodos);
     store.set('todo.2020/04', updatedMonthTodos);
@@ -106,10 +125,15 @@ export default function Modal() {
           onChange={handleChange}
           value={value}
           ref={inputEl}
+          placeholder="What are you up to?"
         />
-        <button onClick={handleSubmit} type="submit">
-          저장
-        </button>
+        <Button
+          onClick={handleSubmit}
+          type="submit"
+          isActive={value !== '' && cursor === -1}
+        >
+          Do it!
+        </Button>
       </Form>
       <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
       <div>
@@ -118,6 +142,7 @@ export default function Modal() {
             isActive={cursor === index}
             buttonCursor={buttonCursor}
             onRemove={handleRemove}
+            onToggleTodo={handleToggleTodo}
             key={todo.timestamp}
             text={todo.text}
             timestamp={todo.timestamp}
@@ -142,7 +167,7 @@ const ModalWrapper = styled.main`
 const Form = styled.form`
   display: flex;
   background: #e6e5e5;
-  padding: 12px;
+  padding: 5px 9px;
   border: 4px solid ${({ isActive }) => (isActive ? '#ffb87b' : 'transparent')};
 `;
 
@@ -167,5 +192,11 @@ const Input = styled.input`
 const SeeMore = styled.div`
   padding: 5px;
   text-align: center;
-  background: ${({ isActive }) => (isActive ? 'gray' : 'inherit')};
+  background: ${({ isActive }) => (isActive ? '#FFDA02' : 'inherit')};
+`;
+
+const Button = styled.button`
+  background: ${({ isActive }) => (isActive ? '#258ef3' : 'inherit')};
+  font-weight: bold;
+  border: none;
 `;
