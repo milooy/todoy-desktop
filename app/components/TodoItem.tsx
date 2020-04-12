@@ -26,7 +26,7 @@ export default function TodoItem({
 }
 
 const Container = styled.div`
-  margin: 10px;
+  margin-bottom: 10px;
   padding: 12px;
   display: flex;
   border: 1px solid #d6d6d6;

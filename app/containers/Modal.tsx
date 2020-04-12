@@ -42,7 +42,7 @@ export default function Modal() {
     }
     if (downPress) {
       setCursor(prevState =>
-        prevState < todoLength - 1 ? prevState + 1 : prevState
+        prevState < todoLength ? prevState + 1 : prevState
       );
     }
     if (upPress) {
@@ -97,7 +97,7 @@ export default function Modal() {
           저장
         </button>
       </Form>
-      <h1>{dayjs().format('ddd, MMM D, YYYY')}</h1>
+      <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
       <div>
         {monthTodos.map((todo, index) => (
           <TodoItem
@@ -111,12 +111,13 @@ export default function Modal() {
           />
         ))}
       </div>
+      <SeeMore isActive={cursor === todoLength}>See more</SeeMore>
     </ModalWrapper>
   );
 }
 
 const ModalWrapper = styled.main`
-  background: white;
+  background: #ffffffe8;
   box-shadow: rgba(23, 25, 29, 0.05) 0 6px 25px;
   margin: 10px;
   padding: 12px;
@@ -129,9 +130,23 @@ const Form = styled.form`
   background: #e6e5e5;
   padding: 12px;
 `;
+
+const Today = styled.div`
+  font-size: 15px;
+  font-weight: lighter;
+  margin: 20px 0 10px;
+  color: #ff9a00;
+  font-style: italic;
+`;
 const Input = styled.input`
   flex: 1;
   border: none;
   background: none;
   font-size: 25px;
+`;
+
+const SeeMore = styled.div`
+  padding: 5px;
+  text-align: center;
+  background: ${({ isActive }) => (isActive ? 'gray' : 'inherit')};
 `;
