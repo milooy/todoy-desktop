@@ -71,6 +71,8 @@ const createWindow = async ({ isModal } = { isModal: false }) => {
         // height: 728,
         transparent: true,
         // transparent: false,
+        alwaysOnTop: true,
+        // skipTaskbar: true,
         frame: false,
         webPreferences
       })
@@ -86,9 +88,7 @@ const createWindow = async ({ isModal } = { isModal: false }) => {
     `file://${__dirname}/app.html${isModal ? '?isModal=true' : ''}`
   );
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.once('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
