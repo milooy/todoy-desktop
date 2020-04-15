@@ -9,6 +9,7 @@ body {
   color: black;
   height: 100vh;
   font-family: Arial, Helvetica, Helvetica Neue, serif;
+  overflow: hidden;
 }
 
 h2 {

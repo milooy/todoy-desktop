@@ -18,7 +18,6 @@ export default function TodoInput({
   const inputEl = useRef<HTMLInputElement>(null);
   const isCursorInInput = cursor === -1;
   const isCursorToday = todoTypeCursor === 0;
-  console.log({ cursor, todoTypeCursor });
 
   useEffect(() => {
     if (!inputEl.current) {

@@ -27,7 +27,7 @@ export default function useCursor({
   const isInInput = cursor === -1;
   const isBacklog = todoTypeCursor === 1;
   // todayTodos도 넣어야함
-  const targetArray = isBacklog ? backlogTodos : monthTodos;
+  const targetArray = todayTodos ?? (isBacklog ? backlogTodos : monthTodos);
 
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
@@ -66,7 +66,6 @@ export default function useCursor({
       if (todo === undefined) {
         return;
       }
-      console.log({ todo, buttonCursor });
       /** Handle Remove Button */
       if (buttonCursor === 1) {
         onPushRemove(todo.timestamp, isBacklog);

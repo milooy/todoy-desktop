@@ -28,7 +28,7 @@ export default function HomePage() {
   // TODO: Context 로 빼기
   return (
     <div>
-      <h2>Spotodo</h2>
+      <Title>Spotodo</Title>
       <TodoInput
         cursor={cursorContext.cursor}
         todoTypeCursor={cursorContext.todoTypeCursor}
@@ -45,4 +45,13 @@ export default function HomePage() {
 
 const Container = styled.main`
   display: flex;
+  top: 200px;
+  position: fixed;
+  bottom: 8px;
+`;
+
+const Title = styled.h1`
+  color: black;
+  margin: 60px 0 10px;
+  font-size: 60px;
 `;

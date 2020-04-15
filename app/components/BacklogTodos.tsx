@@ -1,8 +1,10 @@
 import React from 'react';
+import styled from 'styled-components';
 import { TodoContext } from '../hooks/useTodoContext';
 import { CursorContext } from '../hooks/useCursor';
 
 import TodoItem from './TodoItem';
+import { Today } from './styled';
 
 export default function BacklogTodos({
   todoContext,
@@ -16,7 +18,8 @@ export default function BacklogTodos({
   const isCursorToday = todoTypeCursor === 0;
 
   return (
-    <div>
+    <Container>
+      <Today>Backlog</Today>
       {backlogTodos.map((todo, index) => {
         return (
           <>
@@ -34,6 +37,10 @@ export default function BacklogTodos({
           </>
         );
       })}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.section`
+  overflow-y: auto;
+`;

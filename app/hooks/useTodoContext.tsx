@@ -33,7 +33,6 @@ export default function useTodoContext(): TodoContext {
     const backlogTodosFromStorage = store.get(STORE_KEY_BY_BACKLOGS) ?? [];
     setMonthTodos(todosFromStorage);
     setBacklogTodos(backlogTodosFromStorage);
-    console.log('몇번?');
     // store.delete(STORE_KEY_BY_MONTH); // 리셋하고 싶다면!
   }, []);
 

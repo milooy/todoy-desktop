@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import styled from 'styled-components';
 import { TodoContext } from '../hooks/useTodoContext';
 import { CursorContext } from '../hooks/useCursor';
 import { Today } from './styled';
@@ -19,7 +20,7 @@ export default function MonthTodos({
   const isCursorToday = todoTypeCursor === 0;
 
   return (
-    <div>
+    <Container>
       {monthTodos.map((todo, index) => {
         const date = dayjs(todo.timestamp).format('dddd, MMM D, YYYY');
         const renderedDate = date === cachedPrevDate ? '' : date;
@@ -40,6 +41,10 @@ export default function MonthTodos({
           </>
         );
       })}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.section`
+  overflow-y: auto;
+`;
