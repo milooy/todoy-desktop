@@ -4,20 +4,30 @@ import useKeyPress from './useKeyPress';
 export interface CursorContext {
   cursor: number;
   buttonCursor: number;
+  todoTypeCursor: number;
 }
 
-export default function useCursor(
-  targetArray: any[],
-  {
-    onPushRemove,
-    onPushToggleTodo
-  }: {
-    onPushRemove: (timestamp: number) => void;
-    onPushToggleTodo: (timestamp: number) => void;
-  }
-) {
+export default function useCursor({
+  monthTodos,
+  backlogTodos,
+  todayTodos,
+  onPushRemove,
+  onPushToggleTodo
+}: {
+  monthTodos: any[];
+  backlogTodos: any[];
+  todayTodos: any[];
+  onPushRemove: (timestamp: number, isBacklog: boolean) => void;
+  onPushToggleTodo: (timestamp: number, isBacklog: boolean) => void;
+}) {
   const [cursor, setCursor] = useState(-1);
   const [buttonCursor, setButtonCursor] = useState<number>(2);
+  const [todoTypeCursor, setTodoTypeCursor] = useState<number>(0);
+
+  const isInInput = cursor === -1;
+  const isBacklog = todoTypeCursor === 1;
+  // todayTodos도 넣어야함
+  const targetArray = isBacklog ? backlogTodos : monthTodos;
 
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
@@ -40,9 +50,15 @@ export default function useCursor(
       setCursor(prevState => (prevState > -1 ? prevState - 1 : prevState));
     }
     if (leftPress) {
+      if (isInInput) {
+        setTodoTypeCursor(0);
+      }
       setButtonCursor(prevState => (prevState > 0 ? prevState - 1 : prevState));
     }
     if (rightPress) {
+      if (isInInput) {
+        setTodoTypeCursor(1);
+      }
       setButtonCursor(prevState => (prevState < 2 ? prevState + 1 : prevState));
     }
     if (enterPress) {
@@ -50,16 +66,17 @@ export default function useCursor(
       if (todo === undefined) {
         return;
       }
+      console.log({ todo, buttonCursor });
       /** Handle Remove Button */
       if (buttonCursor === 1) {
-        onPushRemove(todo.timestamp);
+        onPushRemove(todo.timestamp, isBacklog);
       }
       /** Handle Done Button */
       if (buttonCursor === 2) {
-        onPushToggleTodo(todo.timestamp);
+        onPushToggleTodo(todo.timestamp, isBacklog);
       }
     }
   }, [downPress, upPress, leftPress, rightPress, enterPress]);
 
-  return { cursor, buttonCursor };
+  return { cursor, buttonCursor, todoTypeCursor };
 }

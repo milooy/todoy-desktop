@@ -6,6 +6,7 @@ interface Prop {
   timestamp: number;
   isDone: boolean;
   isActive: boolean;
+  isBacklog?: boolean;
   buttonCursor: number;
   onRemove: (timestamp: number) => void;
   onToggleTodo: (timestamp: number) => void;
@@ -18,7 +19,8 @@ export default function TodoItem({
   isActive,
   buttonCursor,
   onRemove,
-  onToggleTodo
+  onToggleTodo,
+  isBacklog
 }: Prop) {
   const getButtonActive = (buttonNum: 0 | 1 | 2) =>
     isActive && buttonCursor === buttonNum;
@@ -27,12 +29,15 @@ export default function TodoItem({
     <Container isActive={isActive}>
       <Input value={text} isDone={isDone} />
       <Button isActive={getButtonActive(0)}>Later</Button>
-      <Button isActive={getButtonActive(1)} onClick={() => onRemove(timestamp)}>
+      <Button
+        isActive={getButtonActive(1)}
+        onClick={() => onRemove(timestamp, isBacklog)}
+      >
         Remove
       </Button>
       <Button
         isActive={getButtonActive(2)}
-        onClick={() => onToggleTodo(timestamp)}
+        onClick={() => onToggleTodo(timestamp, isBacklog)}
       >
         Done
       </Button>

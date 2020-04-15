@@ -3,23 +3,28 @@ import styled from 'styled-components';
 
 interface Prop {
   cursor: number;
+  todoTypeCursor: number;
   onSubmitMonthTodo: (value: string) => void;
   onSubmitBacklogTodo: (value: string) => void;
 }
 
 export default function TodoInput({
   cursor,
+  todoTypeCursor,
   onSubmitMonthTodo,
   onSubmitBacklogTodo
 }: Prop) {
   const [value, setValue] = useState('');
   const inputEl = useRef<HTMLInputElement>(null);
+  const isCursorInInput = cursor === -1;
+  const isCursorToday = todoTypeCursor === 0;
+  console.log({ cursor, todoTypeCursor });
 
   useEffect(() => {
     if (!inputEl.current) {
       return;
     }
-    if (cursor === -1) {
+    if (isCursorInInput) {
       inputEl.current.focus();
     } else {
       inputEl.current.blur();
@@ -47,7 +52,7 @@ export default function TodoInput({
   };
 
   return (
-    <Form isActive={cursor === -1}>
+    <Form isActive={isCursorInInput}>
       <Input
         type="text"
         onChange={handleChange}
@@ -56,20 +61,19 @@ export default function TodoInput({
         placeholder="What are you up to?"
       />
       <Button
+        onClick={handleSubmit}
+        type="submit"
+        isActive={isCursorInInput && isCursorToday}
+      >
+        Today
+      </Button>
+      <Button
         onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           handleSubmit(e, true);
         }}
-        type="submit"
-        // isActive={value !== '' && cursor === -1}
+        isActive={isCursorInInput && !isCursorToday}
       >
         Later
-      </Button>
-      <Button
-        onClick={handleSubmit}
-        type="submit"
-        isActive={value !== '' && cursor === -1}
-      >
-        Today
       </Button>
     </Form>
   );

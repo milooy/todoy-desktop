@@ -10,6 +10,7 @@ export default function HomePage() {
   const todoContext = useTodoContext();
   const {
     monthTodos,
+    backlogTodos,
     handleRemove,
     handleToggleTodo,
     handleSubmit,
@@ -17,7 +18,9 @@ export default function HomePage() {
   } = todoContext;
 
   // TODO: 커서 움직일때마다 rerender 확인
-  const cursorContext = useCursor(monthTodos, {
+  const cursorContext = useCursor({
+    monthTodos,
+    backlogTodos,
     onPushRemove: handleRemove,
     onPushToggleTodo: handleToggleTodo
   });
@@ -28,6 +31,7 @@ export default function HomePage() {
       <h2>Spotodo</h2>
       <TodoInput
         cursor={cursorContext.cursor}
+        todoTypeCursor={cursorContext.todoTypeCursor}
         onSubmitMonthTodo={handleSubmit}
         onSubmitBacklogTodo={handleSubmitBacklog}
       />

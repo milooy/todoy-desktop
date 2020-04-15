@@ -37,16 +37,25 @@ export default function useTodoContext(): TodoContext {
     // store.delete(STORE_KEY_BY_MONTH); // 리셋하고 싶다면!
   }, []);
 
-  const handleRemove = (timestamp: number) => {
-    const updatedMonthTodos: Todo[] = monthTodos.filter(
+  // TODO: 중복 제거
+  const handleRemove = (timestamp: number, isBacklog?: boolean) => {
+    const selectedTodos = isBacklog ? backlogTodos : monthTodos;
+    const updatedTodos: Todo[] = selectedTodos.filter(
       item => item.timestamp !== timestamp
     );
-    setMonthTodos(updatedMonthTodos);
-    store.set(STORE_KEY_BY_MONTH, updatedMonthTodos);
+
+    if (isBacklog) {
+      setBacklogTodos(updatedTodos);
+      store.set(STORE_KEY_BY_BACKLOGS, updatedTodos);
+    } else {
+      setMonthTodos(updatedTodos);
+      store.set(STORE_KEY_BY_MONTH, updatedTodos);
+    }
   };
 
-  const handleToggleTodo = (timestamp: number) => {
-    const updatedMonthTodos: Todo[] = monthTodos.map(item => {
+  const handleToggleTodo = (timestamp: number, isBacklog?: boolean) => {
+    const selectedTodos = isBacklog ? backlogTodos : monthTodos;
+    const updatedTodos: Todo[] = selectedTodos.map(item => {
       if (item.timestamp === timestamp) {
         const updatedItem = item;
         updatedItem.isDone = !item.isDone;
@@ -55,8 +64,13 @@ export default function useTodoContext(): TodoContext {
       return item;
     });
 
-    setMonthTodos(updatedMonthTodos);
-    store.set(STORE_KEY_BY_MONTH, updatedMonthTodos);
+    if (isBacklog) {
+      setBacklogTodos(updatedTodos);
+      store.set(STORE_KEY_BY_BACKLOGS, updatedTodos);
+    } else {
+      setMonthTodos(updatedTodos);
+      store.set(STORE_KEY_BY_MONTH, updatedTodos);
+    }
   };
 
   const handleSubmit = (value: string) => {

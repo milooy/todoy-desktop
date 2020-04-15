@@ -12,7 +12,8 @@ export default function BacklogTodos({
   cursorContext: CursorContext;
 }) {
   const { backlogTodos, handleRemove, handleToggleTodo } = todoContext;
-  const { cursor, buttonCursor } = cursorContext;
+  const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
+  const isCursorToday = todoTypeCursor === 0;
 
   return (
     <div>
@@ -20,7 +21,7 @@ export default function BacklogTodos({
         return (
           <>
             <TodoItem
-              isActive={cursor === index}
+              isActive={cursor === index && !isCursorToday}
               buttonCursor={buttonCursor}
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
@@ -28,6 +29,7 @@ export default function BacklogTodos({
               text={todo.text}
               timestamp={todo.timestamp}
               isDone={todo.isDone}
+              isBacklog
             />
           </>
         );

@@ -16,7 +16,8 @@ export default function Modal() {
     handleSubmitBacklog
   } = useTodo();
 
-  const { cursor, buttonCursor } = useCursor(todayTodos, {
+  const { cursor, buttonCursor, todoTypeCursor } = useCursor({
+    todayTodos,
     onPushRemove: handleRemove,
     onPushToggleTodo: handleToggleTodo
   });
@@ -25,6 +26,7 @@ export default function Modal() {
     <ModalWrapper>
       <TodoInput
         cursor={cursor}
+        todoTypeCursor={todoTypeCursor}
         onSubmitMonthTodo={handleSubmit}
         onSubmitBacklogTodo={handleSubmitBacklog}
       />

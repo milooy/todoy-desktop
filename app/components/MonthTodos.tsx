@@ -15,7 +15,8 @@ export default function MonthTodos({
   cursorContext: CursorContext;
 }) {
   const { monthTodos, handleRemove, handleToggleTodo } = todoContext;
-  const { cursor, buttonCursor } = cursorContext;
+  const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
+  const isCursorToday = todoTypeCursor === 0;
 
   return (
     <div>
@@ -27,7 +28,7 @@ export default function MonthTodos({
           <>
             <Today>{renderedDate}</Today>
             <TodoItem
-              isActive={cursor === index}
+              isActive={cursor === index && isCursorToday}
               buttonCursor={buttonCursor}
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
