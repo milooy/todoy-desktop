@@ -70,10 +70,10 @@ const createWindow = async ({ isModal } = { isModal: false }) => {
         // width: 1024,
         // height: 728,
         transparent: true,
-        // alwaysOnTop: true,
+        alwaysOnTop: true,
         // skipTaskbar: true,
-        // frame: false,
-        frame: true,
+        frame: false,
+        // frame: true,
         webPreferences
       })
     : new BrowserWindow({

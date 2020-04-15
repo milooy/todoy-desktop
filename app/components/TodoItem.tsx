@@ -102,5 +102,5 @@ const Input = styled.input`
   background: transparent;
   text-decoration: ${({ isDone }: DoneOrNot) =>
     isDone ? 'line-through' : 'inherit'};
-  color: ${({ isDone }: DoneOrNot) => (isDone ? '#bbbbbb' : 'inherit')};
+  color: ${({ isDone }: DoneOrNot) => (isDone ? '#585858' : 'white')};
 `;

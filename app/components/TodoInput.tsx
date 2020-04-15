@@ -13,7 +13,8 @@ export default function TodoInput({
   cursor,
   todoTypeCursor,
   onSubmitMonthTodo,
-  onSubmitBacklogTodo
+  onSubmitBacklogTodo,
+  style
 }: Prop) {
   const [value, setValue] = useState('');
   const inputEl = useRef<HTMLInputElement>(null);
@@ -48,7 +49,7 @@ export default function TodoInput({
   };
 
   return (
-    <Container isActive={isCursorInInput}>
+    <Container isActive={isCursorInInput} style={style}>
       <Input
         type="text"
         onChange={handleChange}

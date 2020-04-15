@@ -31,33 +31,55 @@ export default function HomePage() {
 
   // TODO: Context 로 빼기
   return (
-    <div>
-      <Title>Spotodo</Title>
+    <Background>
+      {/* <Title>🔍Spotodo✅</Title> */}
+      <Logo>
+        {/* <img
+          alt="logo"
+          src="https://user-images.githubusercontent.com/3839771/79383175-b87dc800-7f9f-11ea-9a14-6a0413693f19.png"
+        /> */}
+        <Title>Keytodo</Title>
+      </Logo>
       <TodoInput
         cursor={cursorContext.cursor}
         todoTypeCursor={cursorContext.todoTypeCursor}
         onSubmitMonthTodo={handleSubmit}
         onSubmitBacklogTodo={handleSubmitBacklog}
+        style={{ borderTop: '1px solid #76757a' }}
       />
       <Container>
         <MonthTodos todoContext={todoContext} cursorContext={cursorContext} />
         <BacklogTodos todoContext={todoContext} cursorContext={cursorContext} />
       </Container>
-    </div>
+    </Background>
   );
 }
 
+const Background = styled.div`
+  background: #34363a;
+`;
+
 const Container = styled.main`
   display: flex;
-  top: 200px;
+  top: 195px;
   position: fixed;
-  bottom: 8px;
-  left: 10px;
-  right: 10px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #34363a;
 `;
 
 const Title = styled.h1`
-  color: black;
-  margin: 60px 0 10px;
+  color: white;
   font-size: 60px;
+  margin: 0;
+`;
+const Logo = styled.div`
+  padding: 60px 10px 10px;
+  display: flex;
+  align-items: center;
+  img {
+    height: 54px;
+    margin-right: 9px;
+  }
 `;

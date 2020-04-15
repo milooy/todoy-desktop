@@ -29,11 +29,11 @@ export default function MonthTodos({
     <Container>
       {monthTodos.map((todo, index) => {
         const date = dayjs(todo.timestamp).format('dddd, MMM D, YYYY');
-        const renderedDate = date === cachedPrevDate ? '' : date;
+        const renderedDate = date === cachedPrevDate ? null : date;
         cachedPrevDate = date;
         return (
           <>
-            <Today>{renderedDate}</Today>
+            {renderedDate && <Today>{renderedDate}</Today>}
             <TodoItem
               isActive={cursor === index && isCursorToday}
               buttonCursor={buttonCursor}
@@ -55,8 +55,6 @@ export default function MonthTodos({
 
 const Container = styled.section`
   overflow-y: auto;
-  border-right: 1px solid black;
-  margin-right: 40px;
-  padding-right: 40px;
+  border-right: 1px solid #76757a;
   flex: 3;
 `;
