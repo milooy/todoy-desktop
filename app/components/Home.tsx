@@ -1,55 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import dayjs from 'dayjs';
 import routes from '../constants/routes.json';
 import styles from './Home.css';
-import { Todo } from '../types';
-
-const Store = require('electron-store');
-
-const store = new Store();
+import useTodo from '../hooks/useTodo';
+import useCursor from '../hooks/useCursor';
+import TodoInput from './TodoInput';
+import { Today } from './styled';
+import TodoItem from './TodoItem';
 
 export default function Home() {
-  const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
-  const [value, setValue] = useState('');
-  useEffect(() => {
-    setMonthTodos(store.get('todo.2020/04') ?? []);
-    // store.delete('todo.2020/04'); // 리셋하고 싶다면!
-  }, []);
+  const {
+    monthTodos,
+    handleRemove,
+    handleToggleTodo,
+    handleSubmit
+  } = useTodo();
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    const updatedMonthTodos: Todo[] = [
-      ...monthTodos,
-      {
-        timestamp: +new Date(),
-        text: value,
-        isDone: false
-      }
-    ];
-    setMonthTodos(updatedMonthTodos);
-    store.set('todo.2020/04', updatedMonthTodos);
-    setValue('');
-    // console.log(store.get('todo'));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+  const { cursor, buttonCursor } = useCursor(monthTodos, {
+    onPushRemove: handleRemove,
+    onPushToggleTodo: handleToggleTodo
+  });
 
   return (
     <div className={styles.container} data-tid="container">
       <h2>Spotodo</h2>
-      <form>
-        <input type="text" onChange={handleChange} value={value} />
-        <button onClick={handleSubmit} type="submit">
-          저장
-        </button>
-      </form>
-      <ul>
-        {monthTodos.map((todo: Todo) => (
-          <li key={todo.timestamp}>{todo.text}</li>
+      <TodoInput cursor={cursor} onSubmitValue={handleSubmit} />
+      <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
+      <div>
+        {monthTodos.map((todo, index) => (
+          <TodoItem
+            isActive={cursor === index}
+            buttonCursor={buttonCursor}
+            onRemove={handleRemove}
+            onToggleTodo={handleToggleTodo}
+            key={todo.timestamp}
+            text={todo.text}
+            timestamp={todo.timestamp}
+            isDone={todo.isDone}
+          />
         ))}
-      </ul>
+      </div>
       <Link to={routes.COUNTER}>to Counter</Link>
     </div>
   );

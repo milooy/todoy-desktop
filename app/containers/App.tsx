@@ -9,8 +9,5 @@ type Props = {
 export default function App(props: Props) {
   const { children } = props;
   const isModal = getParameterByName('isModal');
-  if (isModal) {
-    return <Modal />;
-  }
-  return <>{children}</>;
+  return isModal ? <Modal /> : <>{children}</>;
 }
