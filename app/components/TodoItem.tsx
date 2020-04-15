@@ -6,7 +6,7 @@ interface Prop {
   timestamp: number;
   isDone: boolean;
   isActive: boolean;
-  buttonCursor: 0 | 1 | 2;
+  buttonCursor: number;
   onRemove: (timestamp: number) => void;
   onToggleTodo: (timestamp: number) => void;
 }
