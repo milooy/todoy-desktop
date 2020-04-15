@@ -34,47 +34,45 @@ export default function TodoInput({
     setValue(e.target.value);
   };
 
-  const handleSubmit = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    isBacklog?: boolean
-  ) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (value === '') {
       return;
     }
-    if (isBacklog) {
-      onSubmitBacklogTodo(value);
-    } else {
+    if (isCursorToday) {
       onSubmitMonthTodo(value);
+    } else {
+      onSubmitBacklogTodo(value);
     }
     setValue('');
   };
 
   return (
-    <Form isActive={isCursorInInput}>
+    <Container isActive={isCursorInInput}>
       <Input
         type="text"
         onChange={handleChange}
         value={value}
         ref={inputEl}
         placeholder="What are you up to?"
+        onKeyPress={event => {
+          if (event.key === 'Enter') {
+            handleSubmit();
+          }
+        }}
       />
       <Button
         onClick={handleSubmit}
-        type="submit"
         isActive={isCursorInInput && isCursorToday}
       >
         Today
       </Button>
       <Button
-        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          handleSubmit(e, true);
-        }}
+        onClick={handleSubmit}
         isActive={isCursorInInput && !isCursorToday}
       >
         Later
       </Button>
-    </Form>
+    </Container>
   );
 }
 
@@ -96,7 +94,7 @@ const Button = styled.button`
   border: none;
 `;
 
-const Form = styled.form`
+const Container = styled.div`
   display: flex;
   background: #e6e5e5;
   padding: 5px 9px;

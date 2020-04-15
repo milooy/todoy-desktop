@@ -13,7 +13,12 @@ export default function BacklogTodos({
   todoContext: TodoContext;
   cursorContext: CursorContext;
 }) {
-  const { backlogTodos, handleRemove, handleToggleTodo } = todoContext;
+  const {
+    backlogTodos,
+    handleRemove,
+    handleToggleTodo,
+    handleMoveToToday
+  } = todoContext;
   const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
   const isCursorToday = todoTypeCursor === 0;
 
@@ -28,6 +33,7 @@ export default function BacklogTodos({
               buttonCursor={buttonCursor}
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
+              onMoveToToday={handleMoveToToday}
               key={todo.timestamp}
               text={todo.text}
               timestamp={todo.timestamp}

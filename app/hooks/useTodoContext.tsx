@@ -10,15 +10,17 @@ const STORE_KEY_BY_MONTH = `todo.${dayjs().format('YYYY/MM')}`;
 const STORE_KEY_BY_BACKLOGS = 'todo.backlogs';
 
 export interface TodoContext {
-  monthTodos: Todo[];
+  monthTodos?: Todo[];
   todayTodos: Todo[];
   handleRemove: (timestamp: number) => void;
   handleToggleTodo: (timestamp: number) => void;
   handleSubmit: (value: string) => void;
+  handleMoveToBacklog: (value: string, timestamp: number) => void;
 
   // Backlog
   handleSubmitBacklog: (value: string) => void;
-  backlogTodos: Todo[];
+  handleMoveToToday: (value: string, timestamp: number) => void;
+  backlogTodos?: Todo[];
 }
 
 export default function useTodoContext(): TodoContext {
@@ -85,11 +87,11 @@ export default function useTodoContext(): TodoContext {
     store.set(STORE_KEY_BY_MONTH, updatedMonthTodos);
   };
 
-  const handleSubmitBacklog = (value: string) => {
+  const handleSubmitBacklog = (text: string) => {
     const updatedBacklogTodos: Todo[] = [
       {
         timestamp: +new Date(),
-        text: value,
+        text,
         isDone: false
       },
       ...backlogTodos
@@ -98,15 +100,27 @@ export default function useTodoContext(): TodoContext {
     store.set(STORE_KEY_BY_BACKLOGS, updatedBacklogTodos);
   };
 
+  const handleMoveToToday = (text: string, timestamp: number) => {
+    handleSubmit(text);
+    handleRemove(timestamp, true);
+  };
+
+  const handleMoveToBacklog = (text: string, timestamp: number) => {
+    handleSubmitBacklog(text);
+    handleRemove(timestamp);
+  };
+
   return {
     monthTodos,
     todayTodos,
     handleRemove,
     handleToggleTodo,
     handleSubmit,
+    handleMoveToBacklog,
 
     // Backlog
     handleSubmitBacklog,
-    backlogTodos
+    backlogTodos,
+    handleMoveToToday
   };
 }

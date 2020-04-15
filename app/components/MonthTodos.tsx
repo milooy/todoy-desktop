@@ -15,7 +15,12 @@ export default function MonthTodos({
   todoContext: TodoContext;
   cursorContext: CursorContext;
 }) {
-  const { monthTodos, handleRemove, handleToggleTodo } = todoContext;
+  const {
+    monthTodos,
+    handleRemove,
+    handleToggleTodo,
+    handleMoveToBacklog
+  } = todoContext;
   const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
   const isCursorToday = todoTypeCursor === 0;
 
@@ -33,6 +38,7 @@ export default function MonthTodos({
               buttonCursor={buttonCursor}
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
+              onMoveToBacklog={handleMoveToBacklog}
               key={todo.timestamp}
               text={todo.text}
               timestamp={todo.timestamp}

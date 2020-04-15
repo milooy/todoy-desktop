@@ -14,7 +14,9 @@ export default function HomePage() {
     handleRemove,
     handleToggleTodo,
     handleSubmit,
-    handleSubmitBacklog
+    handleSubmitBacklog,
+    handleMoveToBacklog,
+    handleMoveToToday
   } = todoContext;
 
   // TODO: 커서 움직일때마다 rerender 확인
@@ -22,7 +24,9 @@ export default function HomePage() {
     monthTodos,
     backlogTodos,
     onPushRemove: handleRemove,
-    onPushToggleTodo: handleToggleTodo
+    onPushToggleTodo: handleToggleTodo,
+    onMoveToBacklog: handleMoveToBacklog,
+    onMoveToToday: handleMoveToToday
   });
 
   // TODO: Context 로 빼기

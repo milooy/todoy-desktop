@@ -12,7 +12,9 @@ export default function useCursor({
   backlogTodos,
   todayTodos,
   onPushRemove,
-  onPushToggleTodo
+  onPushToggleTodo,
+  onMoveToBacklog,
+  onMoveToToday
 }: {
   monthTodos: any[];
   backlogTodos: any[];
@@ -26,7 +28,6 @@ export default function useCursor({
 
   const isInInput = cursor === -1;
   const isBacklog = todoTypeCursor === 1;
-  // todayTodos도 넣어야함
   const targetArray = todayTodos ?? (isBacklog ? backlogTodos : monthTodos);
 
   const downPress = useKeyPress('ArrowDown');
@@ -65,6 +66,14 @@ export default function useCursor({
       const todo = targetArray[cursor];
       if (todo === undefined) {
         return;
+      }
+      /** Handle Later/Today Button */
+      if (buttonCursor === 0) {
+        if (isBacklog) {
+          onMoveToToday(todo.text, todo.timestamp);
+        } else {
+          onMoveToBacklog(todo.text, todo.timestamp);
+        }
       }
       /** Handle Remove Button */
       if (buttonCursor === 1) {

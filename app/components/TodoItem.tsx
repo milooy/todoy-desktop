@@ -8,8 +8,10 @@ interface Prop {
   isActive: boolean;
   isBacklog?: boolean;
   buttonCursor: number;
-  onRemove: (timestamp: number) => void;
-  onToggleTodo: (timestamp: number) => void;
+  onRemove: (timestamp: number, isBacklog: boolean) => void;
+  onToggleTodo: (timestamp: number, isBacklog: boolean) => void;
+  onMoveToToday?: (value: string, timestamp: number) => void;
+  onMoveToBacklog: (value: string, timestamp: number) => void;
 }
 
 export default function TodoItem({
@@ -20,7 +22,9 @@ export default function TodoItem({
   buttonCursor,
   onRemove,
   onToggleTodo,
-  isBacklog
+  onMoveToToday,
+  onMoveToBacklog,
+  isBacklog = false
 }: Prop) {
   const getButtonActive = (buttonNum: 0 | 1 | 2) =>
     isActive && buttonCursor === buttonNum;
@@ -28,7 +32,15 @@ export default function TodoItem({
   return (
     <Container isActive={isActive}>
       <Input value={text} isDone={isDone} />
-      <Button isActive={getButtonActive(0)}>Later</Button>
+      <Button
+        isActive={getButtonActive(0)}
+        onClick={() =>
+          isBacklog
+            ? onMoveToToday(text, timestamp)
+            : onMoveToBacklog(text, timestamp)}
+      >
+        {isBacklog ? 'Today' : 'Later'}
+      </Button>
       <Button
         isActive={getButtonActive(1)}
         onClick={() => onRemove(timestamp, isBacklog)}
@@ -39,7 +51,7 @@ export default function TodoItem({
         isActive={getButtonActive(2)}
         onClick={() => onToggleTodo(timestamp, isBacklog)}
       >
-        Done
+        {isDone ? 'Redo' : 'Done'}
       </Button>
     </Container>
   );
