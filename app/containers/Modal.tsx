@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { Todo } from '../types';
 import TodoItem from '../components/TodoItem';
 import useKeyPress from '../hooks/useKeyPress';
+import TodoInput from '../components/TodoInput';
 
 const Store = require('electron-store');
 
@@ -11,11 +12,9 @@ const store = new Store();
 
 export default function Modal() {
   const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
-  const [value, setValue] = useState('');
   const [cursor, setCursor] = useState(-1);
   const [buttonCursor, setButtonCursor] = useState(2);
   const todoLength = monthTodos.length;
-  const inputEl = useRef(null);
 
   const downPress = useKeyPress('ArrowDown');
   const upPress = useKeyPress('ArrowUp');
@@ -23,7 +22,7 @@ export default function Modal() {
   const rightPress = useKeyPress('ArrowRight');
   const enterPress = useKeyPress('Enter');
 
-  const handleRemove = timestamp => {
+  const handleRemove = (timestamp: number) => {
     const updatedMonthTodos: Todo[] = monthTodos.filter(
       item => item.timestamp !== timestamp
     );
@@ -32,9 +31,8 @@ export default function Modal() {
     store.set('todo.2020/04', updatedMonthTodos);
   };
 
-  const handleToggleTodo = timestamp => {
+  const handleToggleTodo = (timestamp: number) => {
     const updatedMonthTodos: Todo[] = monthTodos.map(item => {
-      console.log({ item, timestamp });
       if (item.timestamp === timestamp) {
         const updatedItem = item;
         updatedItem.isDone = !item.isDone;
@@ -76,21 +74,18 @@ export default function Modal() {
       if (todo === undefined) {
         return;
       }
-      /** Remove */
+      /** Click Remove Button */
       if (buttonCursor === 1) {
         handleRemove(todo.timestamp);
       }
+      /** Click Done Button */
       if (buttonCursor === 2) {
         handleToggleTodo(todo.timestamp);
       }
     }
   }, [downPress, upPress, leftPress, rightPress, enterPress]);
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    if (value === '') {
-      return;
-    }
+  const handleSubmit = (value: string) => {
     const updatedMonthTodos: Todo[] = [
       {
         timestamp: +new Date(),
@@ -101,40 +96,11 @@ export default function Modal() {
     ];
     setMonthTodos(updatedMonthTodos);
     store.set('todo.2020/04', updatedMonthTodos);
-    setValue('');
-    // console.log(store.get('todo'));
   };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
-
-  useEffect(() => {
-    if (cursor === -1) {
-      inputEl.current.focus();
-    } else {
-      inputEl.current.blur();
-    }
-  }, [cursor]);
 
   return (
     <ModalWrapper>
-      <Form isActive={cursor === -1}>
-        <Input
-          type="text"
-          onChange={handleChange}
-          value={value}
-          ref={inputEl}
-          placeholder="What are you up to?"
-        />
-        <Button
-          onClick={handleSubmit}
-          type="submit"
-          isActive={value !== '' && cursor === -1}
-        >
-          Do it!
-        </Button>
-      </Form>
+      <TodoInput cursor={cursor} onSubmitValue={handleSubmit} />
       <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
       <div>
         {monthTodos.map((todo, index) => (
@@ -164,13 +130,6 @@ const ModalWrapper = styled.main`
   border-radius: 6px;
 `;
 
-const Form = styled.form`
-  display: flex;
-  background: #e6e5e5;
-  padding: 5px 9px;
-  border: 4px solid ${({ isActive }) => (isActive ? '#ffb87b' : 'transparent')};
-`;
-
 const Today = styled.div`
   font-size: 15px;
   font-weight: lighter;
@@ -178,25 +137,10 @@ const Today = styled.div`
   color: #ff9a00;
   font-style: italic;
 `;
-const Input = styled.input`
-  flex: 1;
-  border: none;
-  background: none;
-  font-size: 25px;
-
-  &:focus {
-    outline: none;
-  }
-`;
 
 const SeeMore = styled.div`
   padding: 5px;
   text-align: center;
-  background: ${({ isActive }) => (isActive ? '#FFDA02' : 'inherit')};
-`;
-
-const Button = styled.button`
-  background: ${({ isActive }) => (isActive ? '#258ef3' : 'inherit')};
-  font-weight: bold;
-  border: none;
+  background: ${({ isActive }: { isActive: boolean }) =>
+    isActive ? '#FFDA02' : 'inherit'};
 `;

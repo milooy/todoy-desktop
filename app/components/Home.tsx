@@ -38,7 +38,7 @@ export default function Home() {
 
   return (
     <div className={styles.container} data-tid="container">
-      <h2>Todoy</h2>
+      <h2>Spotodo</h2>
       <form>
         <input type="text" onChange={handleChange} value={value} />
         <button onClick={handleSubmit} type="submit">

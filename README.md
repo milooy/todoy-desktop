@@ -1,4 +1,4 @@
-# Todoy
+# Spotodo
 
 ## MVP Todo
 
