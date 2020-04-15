@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import { Button } from './styled';
 
 interface Prop {
   cursor: number;
@@ -68,6 +69,7 @@ export default function TodoInput({
       </Button>
       <Button
         onClick={handleSubmit}
+        type="LATER"
         isActive={isCursorInInput && !isCursorToday}
       >
         Later
@@ -81,24 +83,17 @@ const Input = styled.input`
   border: none;
   background: none;
   font-size: 25px;
+  caret-color: white;
+  color: white;
 
   &:focus {
     outline: none;
   }
 `;
 
-const Button = styled.button`
-  background: ${({ isActive }: { isActive: boolean }) =>
-    isActive ? '#258ef3' : 'inherit'};
-  font-weight: bold;
-  border: none;
-`;
-
 const Container = styled.div`
   display: flex;
-  background: #e6e5e5;
   padding: 5px 9px;
-  border: 4px solid
-    ${({ isActive }: { isActive: boolean }) =>
-      isActive ? 'black' : 'transparent'};
+  border-bottom: 1px solid #76757a;
+  padding: 12px;
 `;

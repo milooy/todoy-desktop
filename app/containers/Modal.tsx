@@ -58,17 +58,18 @@ export default function Modal() {
 }
 
 const ModalWrapper = styled.main`
-  background: #ffffffe8;
+  background: #34363a;
   box-shadow: rgba(23, 25, 29, 0.05) 0 6px 25px;
   margin: 10px;
-  padding: 8px;
   border: 1px solid #ececec;
   border-radius: 6px;
+  color: white;
 `;
 
 const SeeMore = styled.div`
-  padding: 5px;
+  padding: 12px;
   text-align: center;
   background: ${({ isActive }: { isActive: boolean }) =>
-    isActive ? '#FFDA02' : 'inherit'};
+    isActive ? '#3A7CE7' : 'transparent'};
+  border-radius: 0 0 6px 6px;
 `;

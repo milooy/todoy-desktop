@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { Button } from './styled';
 
 interface Prop {
   text: string;
@@ -43,27 +44,32 @@ export default function TodoItem({
   return (
     <Container isActive={isActive}>
       <Input
-        value={value}
+        // value={`✓ ${value}`}
+        value={`${value}`}
         isDone={isDone}
         onChange={handleChange}
         onBlur={handleBlur}
       />
       <Button
+        type="LATER"
         isActive={getButtonActive(0)}
         onClick={() =>
           isBacklog
             ? onMoveToToday(text, timestamp)
-            : onMoveToBacklog(text, timestamp)}
+            : onMoveToBacklog(text, timestamp)
+        }
       >
         {isBacklog ? 'Today' : 'Later'}
       </Button>
       <Button
+        type="REMOVE"
         isActive={getButtonActive(1)}
         onClick={() => onRemove(timestamp, isBacklog)}
       >
         Remove
       </Button>
       <Button
+        type="DONE"
         isActive={getButtonActive(2)}
         onClick={() => onToggleTodo(timestamp, isBacklog)}
       >
@@ -81,23 +87,16 @@ interface DoneOrNot {
 }
 
 const Container = styled.div`
-  margin-bottom: 6px;
-  padding: 5px 9px;
+  padding: 7px 9px;
   display: flex;
-  border: 4px solid
-    ${({ isActive }: ActiveOrNot) => (isActive ? 'black' : 'transparent')};
   background: ${({ isActive }: ActiveOrNot) =>
-    isActive ? '#FFDA02' : 'inherit'};
+    isActive ? '#3A7CE7' : 'inherit'};
+  align-items: center;
 `;
 
-const Button = styled.button`
-  background: ${({ isActive }: ActiveOrNot) =>
-    isActive ? '#258ef3' : 'inherit'};
-  font-weight: bold;
-  border: none;
-`;
 const Input = styled.input`
-  font-size: 25px;
+  font-size: 22px;
+  padding: 5px 12px;
   border: none;
   flex: 1;
   background: transparent;

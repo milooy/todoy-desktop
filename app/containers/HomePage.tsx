@@ -52,6 +52,8 @@ const Container = styled.main`
   top: 200px;
   position: fixed;
   bottom: 8px;
+  left: 10px;
+  right: 10px;
 `;
 
 const Title = styled.h1`
