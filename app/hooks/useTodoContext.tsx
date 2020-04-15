@@ -16,6 +16,11 @@ export interface TodoContext {
   handleToggleTodo: (timestamp: number) => void;
   handleSubmit: (value: string) => void;
   handleMoveToBacklog: (value: string, timestamp: number) => void;
+  handleUpdateTodo: (
+    value: string,
+    timestamp: number,
+    isBacklog: boolean
+  ) => void;
 
   // Backlog
   handleSubmitBacklog: (value: string) => void;
@@ -110,6 +115,30 @@ export default function useTodoContext(): TodoContext {
     handleRemove(timestamp);
   };
 
+  const handleUpdateTodo = (
+    text: string,
+    timestamp: number,
+    isBacklog?: boolean
+  ) => {
+    const selectedTodos = isBacklog ? backlogTodos : monthTodos;
+
+    const updatedTodos: Todo[] = selectedTodos.map(item => {
+      if (item.timestamp === timestamp) {
+        const updatedItem = item;
+        updatedItem.text = text;
+        return updatedItem;
+      }
+      return item;
+    });
+    if (isBacklog) {
+      setBacklogTodos(updatedTodos);
+      store.set(STORE_KEY_BY_BACKLOGS, updatedTodos);
+    } else {
+      setMonthTodos(updatedTodos);
+      store.set(STORE_KEY_BY_MONTH, updatedTodos);
+    }
+  };
+
   return {
     monthTodos,
     todayTodos,
@@ -117,6 +146,7 @@ export default function useTodoContext(): TodoContext {
     handleToggleTodo,
     handleSubmit,
     handleMoveToBacklog,
+    handleUpdateTodo,
 
     // Backlog
     handleSubmitBacklog,

@@ -15,7 +15,8 @@ export default function Modal() {
     handleSubmit,
     handleSubmitBacklog,
     handleMoveToBacklog,
-    handleMoveToToday
+    handleMoveToToday,
+    handleUpdateTodo
   } = useTodo();
 
   const { cursor, buttonCursor, todoTypeCursor } = useCursor({
@@ -43,6 +44,7 @@ export default function Modal() {
             onRemove={handleRemove}
             onToggleTodo={handleToggleTodo}
             onMoveToBacklog={handleMoveToBacklog}
+            onUpdateTodo={handleUpdateTodo}
             key={todo.timestamp}
             text={todo.text}
             timestamp={todo.timestamp}

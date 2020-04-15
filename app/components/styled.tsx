@@ -4,6 +4,6 @@ export const Today = styled.div`
   font-size: 15px;
   font-weight: lighter;
   margin: 20px 0 10px;
-  color: #ff9a00;
+  color: #258ef3;
   font-style: italic;
 `;

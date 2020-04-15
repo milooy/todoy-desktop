@@ -19,7 +19,8 @@ export default function MonthTodos({
     monthTodos,
     handleRemove,
     handleToggleTodo,
-    handleMoveToBacklog
+    handleMoveToBacklog,
+    handleUpdateTodo
   } = todoContext;
   const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
   const isCursorToday = todoTypeCursor === 0;
@@ -39,6 +40,7 @@ export default function MonthTodos({
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
               onMoveToBacklog={handleMoveToBacklog}
+              onUpdateTodo={handleUpdateTodo}
               key={todo.timestamp}
               text={todo.text}
               timestamp={todo.timestamp}
@@ -53,4 +55,8 @@ export default function MonthTodos({
 
 const Container = styled.section`
   overflow-y: auto;
+  border-right: 1px solid black;
+  margin-right: 40px;
+  padding-right: 40px;
+  flex: 3;
 `;

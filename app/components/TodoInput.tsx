@@ -100,5 +100,5 @@ const Container = styled.div`
   padding: 5px 9px;
   border: 4px solid
     ${({ isActive }: { isActive: boolean }) =>
-      isActive ? '#ffb87b' : 'transparent'};
+      isActive ? 'black' : 'transparent'};
 `;

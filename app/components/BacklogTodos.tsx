@@ -17,7 +17,8 @@ export default function BacklogTodos({
     backlogTodos,
     handleRemove,
     handleToggleTodo,
-    handleMoveToToday
+    handleMoveToToday,
+    handleUpdateTodo
   } = todoContext;
   const { cursor, buttonCursor, todoTypeCursor } = cursorContext;
   const isCursorToday = todoTypeCursor === 0;
@@ -34,6 +35,7 @@ export default function BacklogTodos({
               onRemove={handleRemove}
               onToggleTodo={handleToggleTodo}
               onMoveToToday={handleMoveToToday}
+              onUpdateTodo={handleUpdateTodo}
               key={todo.timestamp}
               text={todo.text}
               timestamp={todo.timestamp}
@@ -49,4 +51,5 @@ export default function BacklogTodos({
 
 const Container = styled.section`
   overflow-y: auto;
+  flex: 2;
 `;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 interface Prop {
@@ -12,6 +12,7 @@ interface Prop {
   onToggleTodo: (timestamp: number, isBacklog: boolean) => void;
   onMoveToToday?: (value: string, timestamp: number) => void;
   onMoveToBacklog: (value: string, timestamp: number) => void;
+  onUpdateTodo: (value: string, timestamp: number, isBacklog: boolean) => void;
 }
 
 export default function TodoItem({
@@ -24,14 +25,29 @@ export default function TodoItem({
   onToggleTodo,
   onMoveToToday,
   onMoveToBacklog,
+  onUpdateTodo,
   isBacklog = false
 }: Prop) {
   const getButtonActive = (buttonNum: 0 | 1 | 2) =>
     isActive && buttonCursor === buttonNum;
 
+  const [value, setValue] = useState(text);
+  const handleChange = e => {
+    setValue(e.target.text);
+  };
+
+  const handleBlur = e => {
+    onUpdateTodo(e.target.value, timestamp, isBacklog);
+  };
+
   return (
     <Container isActive={isActive}>
-      <Input value={text} isDone={isDone} />
+      <Input
+        value={value}
+        isDone={isDone}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
       <Button
         isActive={getButtonActive(0)}
         onClick={() =>
@@ -69,7 +85,7 @@ const Container = styled.div`
   padding: 5px 9px;
   display: flex;
   border: 4px solid
-    ${({ isActive }: ActiveOrNot) => (isActive ? '#ffb87b' : 'transparent')};
+    ${({ isActive }: ActiveOrNot) => (isActive ? 'black' : 'transparent')};
   background: ${({ isActive }: ActiveOrNot) =>
     isActive ? '#FFDA02' : 'inherit'};
 `;
@@ -87,5 +103,5 @@ const Input = styled.input`
   background: transparent;
   text-decoration: ${({ isDone }: DoneOrNot) =>
     isDone ? 'line-through' : 'inherit'};
-  color: ${({ isDone }: DoneOrNot) => (isDone ? 'gray' : 'inherit')};
+  color: ${({ isDone }: DoneOrNot) => (isDone ? '#bbbbbb' : 'inherit')};
 `;
