@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import useKeyPress from './useKeyPress';
 
+export interface CursorContext {
+  cursor: number;
+  buttonCursor: number;
+}
+
 export default function useCursor(
   targetArray: any[],
   {

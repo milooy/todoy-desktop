@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import TodoItem from '../components/TodoItem';
 import useCursor from '../hooks/useCursor';
 import TodoInput from '../components/TodoInput';
-import useTodo from '../hooks/useTodo';
+import useTodo from '../hooks/useTodoContext';
 import { Today } from '../components/styled';
 
 export default function Modal() {
@@ -12,7 +12,8 @@ export default function Modal() {
     todayTodos,
     handleRemove,
     handleToggleTodo,
-    handleSubmit
+    handleSubmit,
+    handleSubmitBacklog
   } = useTodo();
 
   const { cursor, buttonCursor } = useCursor(todayTodos, {
@@ -22,7 +23,11 @@ export default function Modal() {
 
   return (
     <ModalWrapper>
-      <TodoInput cursor={cursor} onSubmitValue={handleSubmit} />
+      <TodoInput
+        cursor={cursor}
+        onSubmitMonthTodo={handleSubmit}
+        onSubmitBacklogTodo={handleSubmitBacklog}
+      />
       <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
       <div>
         {todayTodos.map((todo, index) => (

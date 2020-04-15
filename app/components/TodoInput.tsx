@@ -3,10 +3,15 @@ import styled from 'styled-components';
 
 interface Prop {
   cursor: number;
-  onSubmitValue: (value: string) => void;
+  onSubmitMonthTodo: (value: string) => void;
+  onSubmitBacklogTodo: (value: string) => void;
 }
 
-export default function TodoInput({ cursor, onSubmitValue }: Prop) {
+export default function TodoInput({
+  cursor,
+  onSubmitMonthTodo,
+  onSubmitBacklogTodo
+}: Prop) {
   const [value, setValue] = useState('');
   const inputEl = useRef<HTMLInputElement>(null);
 
@@ -25,12 +30,19 @@ export default function TodoInput({ cursor, onSubmitValue }: Prop) {
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSubmit = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    isBacklog?: boolean
+  ) => {
     e.preventDefault();
     if (value === '') {
       return;
     }
-    onSubmitValue(value);
+    if (isBacklog) {
+      onSubmitBacklogTodo(value);
+    } else {
+      onSubmitMonthTodo(value);
+    }
     setValue('');
   };
 
@@ -44,11 +56,20 @@ export default function TodoInput({ cursor, onSubmitValue }: Prop) {
         placeholder="What are you up to?"
       />
       <Button
+        onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+          handleSubmit(e, true);
+        }}
+        type="submit"
+        // isActive={value !== '' && cursor === -1}
+      >
+        Later
+      </Button>
+      <Button
         onClick={handleSubmit}
         type="submit"
         isActive={value !== '' && cursor === -1}
       >
-        Do it!
+        Today
       </Button>
     </Form>
   );
