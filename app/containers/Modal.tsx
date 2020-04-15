@@ -9,13 +9,13 @@ import { Today } from '../components/styled';
 
 export default function Modal() {
   const {
-    monthTodos,
+    todayTodos,
     handleRemove,
     handleToggleTodo,
     handleSubmit
   } = useTodo();
 
-  const { cursor, buttonCursor } = useCursor(monthTodos, {
+  const { cursor, buttonCursor } = useCursor(todayTodos, {
     onPushRemove: handleRemove,
     onPushToggleTodo: handleToggleTodo
   });
@@ -25,7 +25,7 @@ export default function Modal() {
       <TodoInput cursor={cursor} onSubmitValue={handleSubmit} />
       <Today>{dayjs().format('dddd, MMM D, YYYY')}</Today>
       <div>
-        {monthTodos.map((todo, index) => (
+        {todayTodos.map((todo, index) => (
           <TodoItem
             isActive={cursor === index}
             buttonCursor={buttonCursor}
@@ -38,7 +38,7 @@ export default function Modal() {
           />
         ))}
       </div>
-      <SeeMore isActive={cursor === monthTodos.length}>See more</SeeMore>
+      <SeeMore isActive={cursor === todayTodos.length}>See more</SeeMore>
     </ModalWrapper>
   );
 }

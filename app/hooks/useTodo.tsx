@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
+import dayjs from 'dayjs';
 import { Todo } from '../types';
 
 const Store = require('electron-store');
 
 const store = new Store();
+const dateFormatter = (timestamp: number) =>
+  dayjs(timestamp).format('MM-D-YYYY');
 
 export default function useTodo() {
   const [monthTodos, setMonthTodos] = useState<Todo[]>([]);
+  const todayTodos = monthTodos.filter(todo => {
+    return dateFormatter(todo.timestamp) === dateFormatter(+new Date());
+  });
+
   useEffect(() => {
     const todosFromStorage = store.get('todo.2020/04') ?? [];
-    setMonthTodos(todosFromStorage.reverse());
+    setMonthTodos(todosFromStorage);
     // store.delete('todo.2020/04'); // 리셋하고 싶다면!
   }, []);
 
@@ -39,6 +46,7 @@ export default function useTodo() {
     const updatedMonthTodos: Todo[] = [
       {
         timestamp: +new Date(),
+        // timestamp: 1586603084000,
         text: value,
         isDone: false
       },
@@ -50,6 +58,7 @@ export default function useTodo() {
 
   return {
     monthTodos,
+    todayTodos,
     setMonthTodos,
     handleRemove,
     handleToggleTodo,
